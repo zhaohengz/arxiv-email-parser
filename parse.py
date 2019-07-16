@@ -1,4 +1,30 @@
 
+def extract_info(raw_info):
+    # Extract raw info into dict
+    dict_info = {}
+    raw_lines = raw_info.split('\n')
+
+    idx = 0
+    content = ''
+    while idx < len(raw_lines):
+        pos = raw_lines[idx].find(':')
+        if pos >= 0:
+            key = raw_lines[idx][:pos]
+            content += raw_lines[idx][pos+1:].strip() + ' '
+            idx += 1
+            pos = raw_lines[idx].find(':')
+            while pos < 0 and idx < len(raw_lines):
+                content += raw_lines[idx].strip() + ' '
+                idx += 1
+                if (idx >= len(raw_lines)):
+                    break
+                pos = raw_lines[idx].find(':')
+            dict_info[key] = content
+            content = ''
+    
+    print (dict_info)
+
+
 with open('test.eml') as fp:
     raw_lines = fp.readlines()
 
@@ -24,6 +50,5 @@ for line in raw_lines:
         content = ''
         is_abstract = not is_abstract
 
-print (info[0])
-print (abstract[0])
+extract_info(info[0])
     
