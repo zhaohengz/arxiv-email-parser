@@ -37,7 +37,7 @@ def write_to_md(info_list, abstract_list, file_name):
     # Write paper information/abstract to md file
     with open(file_name, 'w') as fp:
         for info, abstract in zip(info_list, abstract_list):
-            fp.write('[# ' + info['Title'] + ']' + '({})'.format(url) + '\n')
+            fp.write('# [{}]({})\n'.format(info['Title'], info['url']) + '\n')
             fp.write('### Authors: ' + info['Authors'] + '\n')
             fp.write('### Categories: ' + info['Categories'] + '\n')
             if 'Comments' in info:
@@ -71,7 +71,7 @@ for line in raw_lines:
         if occurance % 3 == 1: 
             abstract.append(content.strip())
             url = find_url(line)
-            info[-1]['url'] = url
+            info[-1]['url'] = url[0]
         elif occurance % 3 == 0:
             info.append(extract_info(content))
         content = ''
