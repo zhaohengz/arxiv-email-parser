@@ -1,3 +1,10 @@
+import re 
+  
+def find_url(string): 
+    # findall() has been used  
+    # with valid conditions for urls in string 
+    url = re.findall(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\)]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', string) 
+    return url 
 
 def extract_info(raw_info):
     # Extract raw info into dict
@@ -29,9 +36,13 @@ def write_to_md(info_list, abstract_list, file_name):
 
     # Write paper information/abstract to md file
     with open(file_name, 'w') as fp:
-        idx = 0
         for info, abstract in zip(info_list, abstract_list):
-            fp.write('# ' + info['Title'] + '\n')
+            fp.write('[# ' + info['Title'] + ']' + '({})'.format(url) + '\n')
+            fp.write('### Authors: ' + info['Authors'] + '\n')
+            fp.write('### Categories: ' + info['Categories'] + '\n')
+            if 'Comments' in info:
+                fp.write('### Comments: ' + info['Comments'] + '\n')
+            fp.write('---\n')
             fp.write(abstract)
             fp.write('\n')
 
@@ -59,6 +70,8 @@ for line in raw_lines:
     else:
         if occurance % 3 == 1: 
             abstract.append(content.strip())
+            url = find_url(line)
+            info[-1]['url'] = url
         elif occurance % 3 == 0:
             info.append(extract_info(content))
         content = ''
