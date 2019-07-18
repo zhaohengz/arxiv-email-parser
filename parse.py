@@ -4,6 +4,7 @@ import argparse
 import gmail
 import datetime
 import markdown
+import os
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--user', type=str, required=True)
@@ -106,6 +107,12 @@ def process_email(msg):
             content = ''
             occurance += 1
 
+    if not os.path.exists('output/md'):
+        os.makedirs('output/md')
+    
+    if not os.path.exists('output/html'):
+        os.makedirs('output/html')
+    
     write_to_md(info, abstract, msg['date'].strftime('output/md/%d-%m-%y.md'))
     write_to_html(info, abstract, msg['date'].strftime('output/html/%d-%m-%y.html'))
 
